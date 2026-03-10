@@ -1,4 +1,3 @@
-# tests/test_model.py
 """Unit tests for GCN model architecture."""
 
 import pytest

@@ -1,4 +1,3 @@
-# models/gcn.py
 """
 Graph Convolutional Network for paratope prediction (binary node classification).
 """

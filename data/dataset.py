@@ -1,4 +1,3 @@
-# data/dataset.py
 """
 PyTorch Geometric Dataset that wraps our PDB parsing + graph building pipeline.
 """

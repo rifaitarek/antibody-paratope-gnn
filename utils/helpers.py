@@ -1,4 +1,3 @@
-# utils/helpers.py
 """Utility functions: seeding, data splitting, download helpers."""
 
 import os

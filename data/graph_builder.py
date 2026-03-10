@@ -1,4 +1,3 @@
-# data/graph_builder.py
 """
 Convert parsed PDB data into PyTorch Geometric Data objects (graphs).
 Nodes = amino acids. Edges = spatial neighbors within distance cutoff.

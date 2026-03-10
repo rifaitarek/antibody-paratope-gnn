@@ -1,4 +1,3 @@
-# data/parse_pdb.py
 """
 Parse PDB files to extract antibody chain coordinates, residue types,
 and paratope labels (residues in contact with antigen).
