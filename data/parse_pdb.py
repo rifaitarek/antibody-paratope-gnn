@@ -70,14 +70,6 @@ def compute_paratope_labels(ab_residues, ag_residues, threshold=CONTACT_THRESHOL
 
 
 def parse_pdb(pdb_path: str):
-    """
-    Parse a PDB file and return:
-      - coords: (N, 3) array of CA coordinates for antibody residues
-      - features: (N, 3) array [aa_index, polarity, charge]
-      - labels: (N,) binary array (1 = paratope)
-      - residue_names: list of residue name strings
-    Returns None if parsing fails.
-    """
     parser = PDB.PDBParser(QUIET=True)
     try:
         structure = parser.get_structure('ab', pdb_path)
@@ -89,19 +81,47 @@ def parse_pdb(pdb_path: str):
     ab_residues = []
     ag_residues = []
 
-    for chain in model:
+    chains = list(model.get_chains())
+    chain_ids = [c.get_id().upper() for c in chains]
+
+    # Check if standard SAbDab H/L chains exist
+    has_hl = any(cid in ANTIBODY_CHAINS for cid in chain_ids)
+
+    for chain in chains:
         chain_id = chain.get_id().upper()
         residues = get_ca_atoms(chain)
-        if chain_id in ANTIBODY_CHAINS:
-            ab_residues.extend(residues)
+        if not residues:
+            continue
+        if has_hl:
+            if chain_id in ANTIBODY_CHAINS:
+                ab_residues.extend(residues)
+            else:
+                ag_residues.extend(residues)
         else:
-            ag_residues.extend(residues)
+            # Fallback: largest 2 chains = antibody, rest = antigen
+            ab_residues.extend(residues)  # collect all first
+
+    # Fallback: if no antigen found, split by chain count
+    if len(ag_residues) == 0 and not has_hl:
+        # Sort chains by size, treat smallest as antigen
+        chain_data = []
+        for chain in chains:
+            res = get_ca_atoms(chain)
+            if res:
+                chain_data.append(res)
+        chain_data.sort(key=len, reverse=True)
+        # Treat top 2 chains as antibody, rest as antigen
+        ab_residues = []
+        for i, res in enumerate(chain_data):
+            if i < 2:
+                ab_residues.extend(res)
+            else:
+                ag_residues.extend(res)
 
     if len(ab_residues) == 0:
         return None
 
     labels = compute_paratope_labels(ab_residues, ag_residues)
-
     coords = np.array([r['coord'] for r in ab_residues], dtype=np.float32)
     features = []
     for r in ab_residues:

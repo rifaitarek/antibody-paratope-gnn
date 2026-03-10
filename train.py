@@ -21,6 +21,10 @@ from models.gcn import ParatopeGCN
 from utils.metrics import compute_metrics, class_weights_from_dataset
 from utils.helpers import set_seed, split_dataset, download_sabdab_sample
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 @hydra.main(config_path="conf", config_name="config", version_base=None)
 def main(cfg: DictConfig):

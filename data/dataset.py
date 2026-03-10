@@ -39,4 +39,4 @@ class ParatopeDataset(Dataset):
         return len(self._processed_files)
 
     def get(self, idx):
-        return torch.load(str(self._processed_files[idx]))
+        return torch.load(str(self._processed_files[idx]), weights_only=False)
