@@ -18,5 +18,5 @@ optim:
 
 wandb:
   project: abparatope-gnn
-  entity: null  # set to your W&B username
+  entity: null
   log_interval: 5
