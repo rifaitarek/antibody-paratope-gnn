@@ -21,7 +21,7 @@ PDB File → CA Extraction → Distance Graph → GCN → Node Labels (paratope/
 
 ## Installation
 ```bash
-git clone https://github.com/yourusername/AbParatope-GNN.git
+git clone https://github.com/rifaitarek/AbParatope-GNN.git
 cd AbParatope-GNN
 python3 -m venv venv && source venv/bin/activate
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
